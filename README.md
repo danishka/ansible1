@@ -14,13 +14,13 @@
 
 ## How to run
 
-01. Please run the following command you once replaced above mentioned variables. 
+01). Please run the following command you once replaced above mentioned variables. 
 
 ```sh
 ansible-playbook -i  inventory/hosts site.yml 
 ```
  
-02. for a verbose output:
+02). for a verbose output:
 ```sh
 ansible-playbook -i  inventory/hosts site.yml  -vvv
 ```
