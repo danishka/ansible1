@@ -1,0 +1,7 @@
+region: eu-west-1
+user: root
+working_dir: /root/test
+source_file: read.txt
+destination_file: read.txt
+private_key: <private_key>.pem
+current_host: CURRENT_HOST_IP 

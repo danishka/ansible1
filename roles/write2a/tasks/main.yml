@@ -1,0 +1,6 @@
+---
+#  Append type_b read.txt files from host to read.txt in type_a
+#  vars_files: 
+#             - environments/group_vars/config
+
+- shell: ssh -i ~/.ssh/{{ private_key}}   -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" root@{{ current_host }} cat {{ working_dir }}/files/read*.txt  >> /root/{{ destination_file }}

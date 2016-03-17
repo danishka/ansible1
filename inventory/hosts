@@ -1,0 +1,8 @@
+[type_a]
+<type_a_host1_ip> ansible_ssh_private_key_file=/root/.ssh/<private_key>.pem
+<type_b_host1_ip> ansible_ssh_private_key_file=/root/.ssh/<private_key>.pem
+
+[type_b]
+<type_b_host1_ip> ansible_ssh_private_key_file=/root/.ssh/<private_key>.pem
+<type_b_host2_ip> ansible_ssh_private_key_file=/root/.ssh/<private_key>.pem
+<type_b_host3_ip> ansible_ssh_private_key_file=/root/.ssh/<private_key>.pem

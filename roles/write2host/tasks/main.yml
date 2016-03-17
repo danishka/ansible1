@@ -1,0 +1,23 @@
+---
+#- name: Generate host_id, create local files
+#  hosts: type_b
+#  user: root
+#  sudo: no
+  
+#  tasks:
+- name: Retrive private IP
+  remote_user: root
+  shell: ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
+  register: host_ip
+  tags: host_ip
+
+- debug: var=host_ip.stdout
+
+- name: Generate Host ID
+  remote_user: root
+  shell: echo ${{ host_ip.stdout }} |  cut -d. -f3,4 | tr -d '.'
+  register: host_id
+  tags: host_id
+
+- fetch: src=/root/read.txt dest=files/read-{{ host_id.stdout}}.txt flat=yes
+  

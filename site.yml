@@ -1,0 +1,26 @@
+---
+- name: Create local files
+  hosts: all
+  remote_user: root
+  sudo: no
+
+  roles: 
+    - common
+ 
+#Copy files form type_b servers to current host
+- name: Copy files form type_b servers to current host
+  hosts: type_b
+  remote_user: root
+  
+  roles: 
+    - write2host
+
+#Apped individual read.txt files of type_b servers from host to read.txt in type_a servers
+- name: Append type_b read.txt files from host to read.txt in type_a  
+  hosts: type_a
+  remote_user: root
+  vars_files: 
+    - group_vars/config
+  roles: 
+    - write2a
+

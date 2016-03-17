@@ -1,0 +1,44 @@
+---
+
+#Generate host ID using private IP
+- name: Retrive private IP 
+  shell: ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
+  register: host_ip
+  tags: host_ip
+  
+- debug: var=host_ip.stdout
+
+- name: Generate Host ID
+  shell: echo ${{ host_ip.stdout }} |  cut -d. -f3,4 | tr -d '.'
+  register: host_id
+  tags: host_id
+
+- debug: var=host_id.stdout
+
+#read required data from /proc/cpuinfo
+- name: Collect idata from cpuinfo
+  shell: cat /proc/cpuinfo | awk '/^cpu core/{print $4}' | head -1
+  register: cpu_core
+- debug: var=cpu_core.stdout
+  tags: cpu_core
+
+- shell: cat /proc/cpuinfo | awk '/^bogomips/{print $3}' | head -1
+  register: bogomips
+- debug: var=bogomips.stdout
+  tags: bogomips
+
+#Touch local file
+- file: path=/root/read.txt state=touch mode="u=rw,g=r,o=r"
+
+- name: Write to local read.txt in each host
+  template: src=templates/read.j2 dest=/root/read.txt
+
+#Fetch all local files to current host
+#- fetch: src=/root/read.txt dest=files/read-{{ host_id.stdout}}.txt flat=yes
+
+- name: Copy private key
+  copy: src=files/keys/{{ private_key }}  dest=/root/.ssh/{{ private_key }} owner=root group=root mode="u=rw,g-rwx,o-rwx"
+
+#    - name: Copy from type_b to current host
+#      fetch: src=/root/read.txt dest=roles/writeb2a/files//read-{{ host_id.stdout}}.txt flat=yes
+#      with_items:
